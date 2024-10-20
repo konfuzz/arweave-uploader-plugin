@@ -3,7 +3,7 @@
 	"name": "Arweave Uploader",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Convert your Obsidian notes to HTML and upload to Arweave",
+	"description": "Convert your notes to HTML and upload to Arweave",
 	"author": "makesimple.website",
 	"isDesktopOnly": false
 }
