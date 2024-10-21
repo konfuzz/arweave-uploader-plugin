@@ -1,4 +1,4 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, getLinkpath } from 'obsidian';
+import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, getLinkpath, requestUrl } from 'obsidian';
 import Arweave from 'arweave';
 import { marked } from 'marked';
 
@@ -179,8 +179,8 @@ export default class ArweaveUploader extends Plugin {
 	}
 
 	async getArPriceInUSD() {
-		const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=arweave&vs_currencies=usd');
-		const data = await response.json();
+		const response = await requestUrl('https://api.coingecko.com/api/v3/simple/price?ids=arweave&vs_currencies=usd');
+		const data = response.json;
 		return data.arweave.usd;
 	}
 
@@ -255,9 +255,11 @@ class ArweaveUploaderSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
+			.setClass('arweave-uploader-setting')
 			.setName('Private Key')
 			.setDesc('Enter your wallet private key here')
 			.addTextArea(text => {
+				console.log(text)
 				text
 				.setPlaceholder('Enter your private key...')
 				.setValue(this.plugin.settings.privateKey)
@@ -265,8 +267,6 @@ class ArweaveUploaderSettingTab extends PluginSettingTab {
 					this.plugin.settings.privateKey = value;
 					await this.plugin.saveSettings();
 				})
-				text.inputEl.style.width = '400px';
-				text.inputEl.style.height = '100px';
 			});
 	}
 }
