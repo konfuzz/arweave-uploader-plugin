@@ -259,7 +259,6 @@ class ArweaveUploaderSettingTab extends PluginSettingTab {
 			.setName('Private Key')
 			.setDesc('Enter your wallet private key here')
 			.addTextArea(text => {
-				console.log(text)
 				text
 				.setPlaceholder('Enter your private key...')
 				.setValue(this.plugin.settings.privateKey)
