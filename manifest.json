@@ -1,9 +1,9 @@
 {
 	"id": "arweave-uploader",
 	"name": "Arweave Uploader",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Convert your notes to HTML and upload to Arweave",
-	"author": "makesimple.website",
+	"author": "makesimple",
 	"isDesktopOnly": false
 }

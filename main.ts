@@ -1,4 +1,4 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, getLinkpath, requestUrl } from 'obsidian';
+import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, getLinkpath, requestUrl, arrayBufferToBase64 } from 'obsidian';
 import Arweave from 'arweave';
 import { marked } from 'marked';
 
@@ -29,8 +29,15 @@ export default class ArweaveUploader extends Plugin {
 		this.addCommand({
 			id: 'open-modal',
 			name: 'Open modal',
-			callback: async () => {
-				this.openModal();
+			checkCallback: (checking: boolean) => {
+				const activeFile = this.app.workspace.getActiveFile();
+				if (activeFile) {
+					if (!checking) {
+						this.openModal();
+					}
+					return true;
+				}
+				return false;
 			}
 		});
 
@@ -115,18 +122,9 @@ export default class ArweaveUploader extends Plugin {
 
 	async convertImageToBase64(app: App, file: TFile): Promise<string> {
 		const arrayBuffer = await app.vault.readBinary(file);
-		const base64String = this.arrayBufferToBase64(arrayBuffer);
+		const base64String = arrayBufferToBase64(arrayBuffer);
 		const mimeType = this.getMimeType(file.extension);
 		return `data:${mimeType};base64,${base64String}`;
-	}
-	
-	arrayBufferToBase64(buffer: ArrayBuffer): string {
-		let binary = '';
-		const bytes = new Uint8Array(buffer);
-		for (let i = 0; i < bytes.byteLength; i++) {
-			binary += String.fromCharCode(bytes[i]);
-		}
-		return window.btoa(binary);
 	}
 	
 	getMimeType(extension: string): string {
@@ -256,7 +254,7 @@ class ArweaveUploaderSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setClass('arweave-uploader-setting')
-			.setName('Private Key')
+			.setName('Private key')
 			.setDesc('Enter your wallet private key here')
 			.addTextArea(text => {
 				text
